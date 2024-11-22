@@ -62,7 +62,7 @@ def toplotanindividulresults():
     #ax1.set_ylabel("Theta (deg)")
     #ax1.set_xlabel("Time (s)")
     ax1.legend()
-    plt.show()
+    #plt.show()
 
 if __name__ == '__main__':
 
@@ -94,7 +94,7 @@ if __name__ == '__main__':
     ax1.scatter(final_mass, final_rad, label='not usre')
     ax1.set_xlabel("Mass (g)")
     ax1.set_ylabel("Radius (cm)")
-    plt.show()
+    #plt.show()
 
     ## PART 2 Compare Chandrasekhar Limits
     mass_of_sun_in_grams = 1.989e33
@@ -128,4 +128,13 @@ if __name__ == '__main__':
     print(DOP853_final_mass)
     print(final_mass[:3])
     print(final_rad[:3])
+
+    n_sf = 4
+    for i in range(3):
+        print(f"With rho_c = {rho_c[i]}:")
+        print(f"RK45 Method produced:\t\tradius={final_rad[i]:.{n_sf}} mass={final_mass[i]:.{n_sf}}")
+        print(f"DOP853 Method produced:\t\tradius={DOP853_final_rad[i]:.{n_sf}} mass={DOP853_final_mass[i]:.{n_sf}}")
+
+
+
 
