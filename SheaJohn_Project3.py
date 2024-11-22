@@ -48,21 +48,6 @@ def density_zero_event(t, y):
     return y[0]
 density_zero_event.terminal = True
 
-def toplotanindividulresults():
-    # plot results
-    fig1 = plt.figure(f"figure {i}/10")
-    ax1 = fig1.add_subplot()
-    ax1.set_title("density over r")
-    # plot each intial condition
-    ax1.plot(wd_sol.t, wd_sol.y[0], label='density')
-    ax1.plot([], [], '-r', label = 'mass') # forgive me lord for i have sinned
-    ax2 = ax1.twinx()
-    ax2.plot(wd_sol.t, wd_sol.y[1], '-r', label='mass')
-    # add labels
-    #ax1.set_ylabel("Theta (deg)")
-    #ax1.set_xlabel("Time (s)")
-    ax1.legend()
-    #plt.show()
 
 if __name__ == '__main__':
 
@@ -94,10 +79,11 @@ if __name__ == '__main__':
     ax1.scatter(final_mass, final_rad, label='not usre')
     ax1.set_xlabel("Mass (g)")
     ax1.set_ylabel("Radius (cm)")
-    #plt.show()
+    plt.show()
 
     ## PART 2 Compare Chandrasekhar Limits
     mass_of_sun_in_grams = 1.989e33
+    radius_of_the_sun_in_cm = 6.95508e10
     estimated_Mch_g = final_mass[-1]
     estimated_Mch_MoS = final_mass[-1] / mass_of_sun_in_grams
     print(f"Estimated Chandrasekhar Limit : {estimated_Mch_MoS*(mu_e**2)} / (μe)^2 (solar masses)")
@@ -129,11 +115,29 @@ if __name__ == '__main__':
     print(final_mass[:3])
     print(final_rad[:3])
 
+    # number of sig figs to print
     n_sf = 4
     for i in range(3):
         print(f"With rho_c = {rho_c[i]}:")
         print(f"RK45 Method produced:\t\tradius={final_rad[i]:.{n_sf}} mass={final_mass[i]:.{n_sf}}")
         print(f"DOP853 Method produced:\t\tradius={DOP853_final_rad[i]:.{n_sf}} mass={DOP853_final_mass[i]:.{n_sf}}")
+
+    ## Part 4 - Observed data vs model
+
+    observed = np.genfromtxt('wd_mass_radius.csv', delimiter=',')[1:]
+    fig1 = plt.figure(f"figure")
+    ax1 = fig1.add_subplot()
+    ax1.set_title("Radius by Mass : Observed and Simulated")
+    # plot each initial condition
+    ax1.scatter(final_mass/mass_of_sun_in_grams, final_rad/radius_of_the_sun_in_cm, label='Simulated')
+
+    ax1.errorbar(observed[:,0], observed[:,2], xerr=observed[:,1], yerr=observed[:,3], fmt='ro', capsize=5, label='Observed')
+
+    ax1.set_xlabel("Mass (solar masses)")
+    ax1.set_ylabel("Radius (solar radii)")
+    ax1.legend()
+    plt.show()
+
 
 
 
