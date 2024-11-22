@@ -96,3 +96,9 @@ if __name__ == '__main__':
     ax1.set_ylabel("Radius (cm)")
     plt.show()
 
+    mass_of_sun_in_grams = 1.989e33
+    estimated_Mch_g = final_mass[-1]
+    estimated_Mch_MoS = final_mass[-1] / mass_of_sun_in_grams
+    print(f"Estimated Chandrasekhar Limit : {estimated_Mch_MoS*(mu_e**2)} / (μe)^2 (solar masses)")
+    print("Kippenhahn & Weigert (1990) cite Chandrasekhar Limit as 5.836/(μe)^2  (solar masses)")
+
