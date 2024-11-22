@@ -96,9 +96,36 @@ if __name__ == '__main__':
     ax1.set_ylabel("Radius (cm)")
     plt.show()
 
+    ## PART 2 Compare Chandrasekhar Limits
     mass_of_sun_in_grams = 1.989e33
     estimated_Mch_g = final_mass[-1]
     estimated_Mch_MoS = final_mass[-1] / mass_of_sun_in_grams
     print(f"Estimated Chandrasekhar Limit : {estimated_Mch_MoS*(mu_e**2)} / (μe)^2 (solar masses)")
     print("Kippenhahn & Weigert (1990) cite Chandrasekhar Limit as 5.836/(μe)^2  (solar masses)")
+
+
+    ## PART 3 Compare intergration methods
+
+    DOP853_final_mass_bold = np.zeros(3)
+    DOP853_final_rad_bold = np.zeros(3)
+
+    for i in range(3):
+        wd_sol = scipy.integrate.solve_ivp(
+                whitedrawf_dydr, 
+                t_span=[1e-10, 3e6], 
+                y0=[rho_c[i], 0], 
+                method='DOP853',
+                dense_output=True, 
+                events=density_zero_event)
+
+        DOP853_final_mass_bold[i] = wd_sol.y[1][-1]
+        DOP853_final_rad_bold[i] = wd_sol.t[-1]
+
+    DOP853_final_mass = DOP853_final_mass_bold * M0
+    DOP853_final_rad = DOP853_final_rad_bold * r0
+
+    print(DOP853_final_rad)
+    print(DOP853_final_mass)
+    print(final_mass[:3])
+    print(final_rad[:3])
 
